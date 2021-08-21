@@ -1,0 +1,55 @@
+<html>
+    <head>
+        <title>{{ titulo }}</title>
+        <link href="css/black-tie/jquery-ui-1.9.2.custom.min.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <form method="post" enctype="multipart/form-data" action="/convert">
+        <div style="height: 60px; width: 720px; margin:auto; padding-left: 60px;">
+            <img src="img/logo.jpg" width="190" height="60" alt="logo" />
+            <div style="float: right; width: 200px; margin-top: 20px;">
+                <img src="https://developers.google.com/appengine/images/appengine-silver-120x30.gif" 
+alt="Powered by Google App Engine" />
+            </div>
+        </div>
+        <div id="main" style="margin:auto; background-image: url(img/k7.jpg); width: 720px; height: 472px">
+            <div style="position: relative; left: 90px; top: 87px;">
+                <input type="file" name="arquivo" multiple="multiple" />
+                &nbsp; &nbsp;
+                <button id="btnEnviar" type="submit">Convert</button>
+            </div>
+        </div>
+        <div id="abas" style="width: 720px; margin:auto">
+            <h3>Options</h3>
+            <div>
+                <p><label for="sr">Sample rate:</label><select id="sr" name="sr"><option value="44100">44100</option>
+                <option value="48000">48000</option>
+                </select>
+                </p>
+                <p><label for="bps">Bits per sample:</label><select id="bps" name="bps"><option value="16">16</option>
+                <option value="8">8</option> &nbsp;&nbsp;
+                <input type="checkbox" checked="checked" name="stereo" id="stereo" value="stereo" /><label for="stereo">Stereo</label></p>
+                
+                <p><input type="checkbox" checked="checked" name="gap" id="gap" value="gap" /><label for="gap">1/2 second gap after name block</label>
+                </p>
+                
+            </div>
+            <h3>About</h3>
+            <div>
+            <p>This is a cas-to-wav converter. It is roughly based on cas2wav.pl, a Perl script that can be found 
+            <a href="http://archive.worldofdragon.org/downloads/Tools/cas2wav.pl.txt">here</a> and it is hosted by World of Dragon.
+            </p>
+            <p>In order to add a 1/2-second gap after the name block (the very first block in a cas file), the whole file must be processed. Some files got their data in such a way that the processing algorithm can't read them, but the real (and some virtual) hardware can. Try to disable the gap if an error happens.</p>
+            <p>This tool was <strong>not</strong> designed for converting BASIC files. However, by popular demand this could be included as well.</p>
+            </div>
+        </div>
+        </form>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+        <script>
+        $(function() {
+            $("#abas").accordion();
+        });    
+        </script>
+    </body>
+</html>    
