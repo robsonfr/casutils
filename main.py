@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Copyright 2007 Google Inc.
 #
@@ -14,8 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-import cgi
-import webapp2
+from flask import Flask, render_template
 import os
 from zipfile import ZipFile, ZIP_DEFLATED
 from io import BytesIO
@@ -23,17 +22,21 @@ import jinja2
 
 from casconv import Cas2Wav, Cas2Bin, Cas2WavStream
 
+app = Flask(__name__)
+
 jinja_environment = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
 
-class MainPage(webapp2.RequestHandler):
-    def get(self):
-        template_values = {
-            "titulo" : "CasUtils"
-        }
-        template = jinja_environment.get_template('index.html')
-        self.response.out.write(template.render(template_values))
 
+@app.route('/')
+def main(self):
+    template_values = {
+        "titulo" : "CasUtils"
+    }
+    template = jinja_environment.get_template('index.html')
+    return template.render(template_values)
+
+@app.route()
 class CasProcessor(webapp2.RequestHandler):
     def post(self):
         arquivo = BytesIO(bytearray(self.request.get("arquivo")))        
@@ -64,7 +67,3 @@ class CasProcessor(webapp2.RequestHandler):
 #    x = saida.stream.readall()
 #    print len(x)
         
-app = webapp2.WSGIApplication([
-    ('/', MainPage),
-    ('/convert',CasProcessor),
-], debug=True)

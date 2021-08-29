@@ -1,6 +1,4 @@
-application: casutils
-version: 1
-runtime: python27
+runtime: python39
 api_version: 1
 threadsafe: yes
 
@@ -18,12 +16,5 @@ handlers:
   static_files: favicon.ico
   upload: favicon\.ico
 
-- url: .*
-  script: main.app
-
-libraries:
-- name: webapp2
-  version: "2.5.2"
-  
-- name: jinja2
-  version: latest  
+- url: /.*
+  script: auto
