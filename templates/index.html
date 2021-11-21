@@ -1,18 +1,18 @@
 <html>
     <head>
         <title>{{ titulo }}</title>
-        <link href="css/black-tie/jquery-ui-1.9.2.custom.min.css" rel="stylesheet" type="text/css" />
+        <link href="{{ url_for('static', filename='css/jquery-ui-1.9.2.custom.min.css') }}" rel="stylesheet" type="text/css" />
     </head>
     <body>
         <form method="post" enctype="multipart/form-data" action="/convert">
         <div style="height: 60px; width: 720px; margin:auto; padding-left: 60px;">
-            <img src="img/logo.jpg" width="190" height="60" alt="logo" />
+            <img src="{{ url_for('static', filename='img/logo.jpg') }}" width="190" height="60" alt="logo" />
             <div style="float: right; width: 200px; margin-top: 20px;">
                 <img src="https://developers.google.com/appengine/images/appengine-silver-120x30.gif" 
 alt="Powered by Google App Engine" />
             </div>
         </div>
-        <div id="main" style="margin:auto; background-image: url(img/k7.jpg); width: 720px; height: 472px">
+        <div id="main" style="margin:auto; background-image: url({{ url_for('static', filename='img/k7.jpg') }}); width: 720px; height: 472px">
             <div style="position: relative; left: 90px; top: 87px;">
                 <input type="file" name="arquivo" multiple="multiple" />
                 &nbsp; &nbsp;

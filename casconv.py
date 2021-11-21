@@ -318,7 +318,7 @@ def cocotla_loader(output_fn, target, dados, app, ajuste=6, staddr = 0x3000, rna
     q = len(dados) // 255 + 1
     u  = len(dados) % 255
 
-    nome, ext = target.split(".")
+    nome, _ = target.split(".")
     with output_fn(target) as s:
         
         s.write_leader()
@@ -355,7 +355,7 @@ class Bas2Cas:
 
 
     def bloco_nome_arquivo(self) -> bytes:
-        #nome_arquivo = 'TESTE'
+        
         nome_arquivo = (self._filename.upper()[:8] + ' ' * 8)[:8]
         dados_arquivo = list([ord(l) for l in nome_arquivo]) + [0,255,255,0,0,0,0]
         lda = len(dados_arquivo)
@@ -400,7 +400,7 @@ if __name__ == "__main__":
             if entrada[-3:].lower() == 'cas':
                 c = Cas2Bin(entrada)
                 nome, end_inicial, end_exec, dados, gap = c.read()
-                # print(end_inicial, end_exec, nome, gap)
+                
                 out.write(bytes(dados))
             elif entrada[-3:].lower() == 'bas':
                 pass
@@ -408,5 +408,5 @@ if __name__ == "__main__":
                 pass
 
     except:
-        print("Sintaxe: casconv.py -i entrada - o saida")
+        print("Sintaxe: casconv.py -i entrada -o saida")
         sys.exit(1)

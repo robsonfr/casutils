@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-from flask import Flask, render_template, request, make_response, send_file
+from flask import Flask, render_template, request, send_file
 import os
 from zipfile import ZipFile, ZIP_DEFLATED
 from io import BytesIO
@@ -24,17 +24,10 @@ from casconv import Cas2Wav, Cas2Bin, Cas2WavStream
 
 app = Flask(__name__)
 
-jinja_environment = jinja2.Environment(
-    loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
-
 
 @app.route('/')
 def main():
-    template_values = {
-        "titulo" : "CasUtils"
-    }
-    template = jinja_environment.get_template('templates/index.html')
-    return template.render(template_values)
+    return render_template('index.html', titulo="CasUtils")
 
 @app.route('/convert', methods=['GET', 'POST'])
 def post():
@@ -53,17 +46,9 @@ def post():
         saida.update()
         saida.stream.seek(0)
         x = saida.stream.read()
-        # response.headers.add_header('content-type','application/octet-stream')
-        # response.headers.add_header('content-disposition', 'attachment', filename='output.zip')
         out = BytesIO()
         with ZipFile(out,"w",ZIP_DEFLATED) as zip:
             zip.writestr("output.wav",x)
         out.seek(0)
         return send_file(out, mimetype='application/octet-stream', as_attachment=True, download_name='output.zip')
-        
-
-#with Cas2WavStream(nome_saida, tem_gap = gap, sps = sps, stereo = (chan == 2), bps = bits) as saida:
-#    saida.write_todos_blocos(todos_blocos)
-#    x = saida.stream.readall()
-#    print len(x)
         
