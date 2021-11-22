@@ -1,1 +1,6 @@
+<<<<<<< HEAD
 index.yaml
+=======
+index.yaml
+*.pyc
+>>>>>>> e57f3da (Atualizado gitignore)
