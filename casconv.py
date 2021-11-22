@@ -6,7 +6,7 @@ from struct import pack,unpack
 
 def ondas(zero_one : int = 0, cocotla : bool = False, bit_length : int = 16, samples_per_second : int = 48000, channels : int = 2):
     bits = { 8 : (127,127,"B",1), 16 : (0,32767,"<h",1) }    
-    if not bit_length in bits.keys():
+    if not bit_length in list(bits.keys()):
         bit_length = 8
     mid_value, factor, fmt, sgn = bits[bit_length]        
 
@@ -20,17 +20,15 @@ def ondas(zero_one : int = 0, cocotla : bool = False, bit_length : int = 16, sam
         num_of_samples = (int(samples_per_second / 1090), int(samples_per_second / 2000))
     nos = num_of_samples[zero_one & 1]
     for k in range(nos):
-        p = bytearray(pack(fmt, int(mid_value + sgn * factor * math.sin(float(k) / float(nos) * math.pi * 2.0))))
+        p = bytearray(pack(fmt, int(mid_value + sgn * factor * math.sin(float(k) / float(nos) * math.pi * 2.0)))*channels)
         for baite in p:
         #for baite in bytearray(pack(fmt, int(mid_value + sgn * factor * math.sqrt(1-math.pow(math.cos(float(k) / float(nos) * math.pi * 2.0),2.0)))) * channels):
             yield baite
-            if channels > 1:
-                yield baite
 
 def pausa(bit_length = 16, samples_per_second = 48000, channels : int = 2):
     bits = { 8 : (127,"B"), 16 : (0,"<H") }
     num_of_samples = int(samples_per_second / 2)
-    if bit_length in bits.keys():
+    if bit_length in list(bits.keys()):
         mid_value, fmt = bits[bit_length]        
     else:
         mid_value, fmt = bits[8]
@@ -314,7 +312,7 @@ def cocotla_loader(output_fn, target, dados, app, ajuste=6, staddr = 0x3000, rna
     dados[off_eof:off_eof+2] = bytearray(pack(">H", final_addr))
     
     leader = bytearray("U" * 128)
-    l2 = bytearray(range(256)*2)
+    l2 = bytearray(list(range(256))*2)
     q = len(dados) // 255 + 1
     u  = len(dados) % 255
 

@@ -15,12 +15,10 @@
 # limitations under the License.
 #
 from flask import Flask, render_template, request, send_file
-import os
 from zipfile import ZipFile, ZIP_DEFLATED
 from io import BytesIO
-import jinja2
 
-from casconv import Cas2Wav, Cas2Bin, Cas2WavStream
+from casconv import Cas2Bin, Cas2WavStream
 
 app = Flask(__name__)
 
@@ -32,7 +30,9 @@ def main():
 @app.route('/convert', methods=['GET', 'POST'])
 def post():
     f = request.files["arquivo"]
-    arquivo = BytesIO(bytearray(f.read()))        
+    b=bytearray(f.read())
+    arquivo = BytesIO(b)
+    print(len(b))
     gap = request.form["gap"] == "gap"
     samples_per_second = int(request.form["sr"])
     stmono = request.form["stereo"] == "stereo"
