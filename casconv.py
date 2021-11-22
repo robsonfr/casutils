@@ -106,7 +106,7 @@ class BlocoEOF(Bloco):
         Bloco.__init__(self, 0xFF, []) 
 
 def novo_bloco_arquivo(data):
-    nome = str(data[0:8]).strip()
+    nome = str(data[0:8].decode()).strip()
     subtipo = data[8]
     ascii = data[9] != 0
     gap = data[10] != 0
