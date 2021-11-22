@@ -33,9 +33,9 @@ def post():
     b=bytearray(f.read())
     arquivo = BytesIO(b)
     print(len(b))
-    gap = request.form["gap"] == "gap"
+    gap = request.form.get("gap","") == "gap"
     samples_per_second = int(request.form["sr"])
-    stmono = request.form["stereo"] == "stereo"
+    stmono = request.form.get("stereo","") == "stereo"
     bits = int(request.form["bps"])
     with Cas2WavStream(tem_gap = gap, sps = samples_per_second, stereo = stmono, bps = bits) as saida:
         if gap:
