@@ -18,21 +18,12 @@ from flask import Flask, render_template, request, send_file
 from zipfile import ZipFile, ZIP_DEFLATED
 from io import BytesIO
 
-from casconv import Cas2Bin, Cas2WavStream
+from casconv import Cas2Bin, Cas2WavStream, Bas2Cas
 
 app = Flask(__name__)
 
-
-@app.route('/')
-def main():
-    return render_template('index.html', titulo="CasUtils")
-
-@app.route('/convert', methods=['GET', 'POST'])
-def post():
-    f = request.files["arquivo"]
-    b=bytearray(f.read())
+def genWaveData(b : bytearray):
     arquivo = BytesIO(b)
-    print(len(b))
     gap = request.form.get("gap","") == "gap"
     samples_per_second = int(request.form["sr"])
     stmono = request.form.get("stereo","") == "stereo"
@@ -50,5 +41,27 @@ def post():
         with ZipFile(out,"w",ZIP_DEFLATED) as zip:
             zip.writestr("output.wav",x)
         out.seek(0)
-        return send_file(out, mimetype='application/octet-stream', as_attachment=True, download_name='output.zip')
+    return out
+
+
+@app.route('/')
+def main():
+    return render_template('index.html', titulo="CasUtils")
+
+@app.route('/convert', methods=['GET', 'POST'])
+def post():
+    f = request.files["arquivo"]
+    b=bytearray(f.read())
+    return send_file(genWaveData(b), mimetype='application/octet-stream', as_attachment=True, download_name='output.zip')
         
+
+@app.route('/convbas', methods=['GET', 'POST'])
+def postBas():
+    basic_code = request.form.get('basic','')
+    if len(basic_code):
+        basic_code += '\r\n'
+        b=bytearray(basic_code, encoding="ASCII")
+        print(b.decode(encoding="ASCII"))
+        return send_file(genWaveData(Bas2Cas('PROG.BAS',b).stream().read()), mimetype='application/octet-stream', as_attachment=True, download_name='basoutput.zip')
+    else:
+        return "You must send a BASIC code!", 400

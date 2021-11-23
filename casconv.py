@@ -290,7 +290,6 @@ class Cas2WavStream(Cas2Wav):
         if stream != None:
             self.__file = stream
         else:
-            from io import BytesIO
             self.__file = BytesIO()
         Cas2Wav.set_file(self, self.__file)       
         
@@ -358,7 +357,8 @@ class Bas2Cas:
         dados_arquivo = list([ord(l) for l in nome_arquivo]) + [0,255,255,0,0,0,0]
         lda = len(dados_arquivo)
         soma = (sum(dados_arquivo) + 0 + lda) % 256
-        return bytes([85,60,0,lda] + dados_arquivo + [soma, 85])
+        b = bytes([85,60,0,lda] + dados_arquivo + [soma, 85])
+        return b
 
     def bloco_dados(self):
         i = 0
@@ -384,7 +384,12 @@ class Bas2Cas:
         yield Bas2Cas.LEADER
         yield Bas2Cas.EOF
 
-
+    def stream(self):
+        out = BytesIO()
+        for data in self.processar():
+            out.write(data)
+        out.seek(0)
+        return out
 
 if __name__ == "__main__":
     import sys

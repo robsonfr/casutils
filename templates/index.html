@@ -6,7 +6,7 @@
     <body>
         <form method="post" enctype="multipart/form-data" action="/convert">
         <div style="height: 60px; width: 720px; margin:auto; padding-left: 60px;">
-            <img src="{{ url_for('static', filename='img/logo.jpg') }}" width="190" height="60" alt="logo" />
+            <img src="{{ url_for('static', filename='img/logo.jpg') }}" width="190" height="60" alt="logo" />v. 2
             <div style="float: right; width: 200px; margin-top: 20px;">
                 <img src="https://developers.google.com/appengine/images/appengine-silver-120x30.gif" 
 alt="Powered by Google App Engine" />
@@ -16,7 +16,7 @@ alt="Powered by Google App Engine" />
             <div style="position: relative; left: 90px; top: 87px;">
                 <input type="file" name="arquivo" multiple="multiple" />
                 &nbsp; &nbsp;
-                <button id="btnEnviar" type="submit">Convert</button>
+                <button id="btnEnviar" type="button">Convert</button>
             </div>
         </div>
         <div id="abas" style="width: 720px; margin:auto">
@@ -34,13 +34,20 @@ alt="Powered by Google App Engine" />
                 </p>
                 
             </div>
+            <h3>BASIC to Wav (New)</h3>
+            <div>
+                <p>Write down BASIC code and convert it to a Wave file, ready to be CLOAD'ed!</p>
+                <textarea name="basic" rows="10" cols="60"></textarea>
+                <button type="button" id="btnBAS" class="ui-button ui-widget ui-corner-all">Convert code</button>
+            </div>
             <h3>About</h3>
             <div>
             <p>This is a cas-to-wav converter. It is roughly based on cas2wav.pl, a Perl script that can be found 
             <a href="http://archive.worldofdragon.org/downloads/Tools/cas2wav.pl.txt">here</a> and it is hosted by World of Dragon.
             </p>
             <p>In order to add a 1/2-second gap after the name block (the very first block in a cas file), the whole file must be processed. Some files got their data in such a way that the processing algorithm can't read them, but the real (and some virtual) hardware can. Try to disable the gap if an error happens.</p>
-            <p>This tool was <strong>not</strong> designed for converting BASIC files. However, by popular demand this could be included as well.</p>
+            <p style="text-decoration: line-through">This tool was <strong>not</strong> designed for converting BASIC files. However, by popular demand this could be included as well.</p>
+            <p>Now it support BASIC files! Just type the code in and click the "Convert code" button!</p>
             </div>
         </div>
         </form>
@@ -49,6 +56,13 @@ alt="Powered by Google App Engine" />
         <script>
         $(function() {
             $("#abas").accordion();
+            $("#btnEnviar").on("click", function() {
+                $("form").prop("action","/convert").submit();                
+            });
+            $("#btnBAS").on("click", function() {
+                $("#gap").prop("checked", "");
+                $("form").prop("action","/convbas").submit();
+            });
         });    
         </script>
     </body>
