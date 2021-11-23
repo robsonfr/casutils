@@ -61,7 +61,6 @@ def postBas():
     if len(basic_code):
         basic_code += '\r\n'
         b=bytearray(basic_code, encoding="ASCII")
-        print(b.decode(encoding="ASCII"))
         return send_file(genWaveData(Bas2Cas('PROG.BAS',b).stream().read()), mimetype='application/octet-stream', as_attachment=True, download_name='basoutput.zip')
     else:
         return "You must send a BASIC code!", 400
