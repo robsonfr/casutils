@@ -368,8 +368,8 @@ class Bas2Cas:
                 filtrado.append(b)
         if filtrado[0] != 13:
             filtrado.insert(0,13)
-        while i < len(self._code):
-            d = self._code[i:i+255]
+        while i < len(filtrado):
+            d = filtrado[i:i+255]
             l = len(d)
             s = (sum(d) + 1 + l) % 256
             yield bytearray([85,60,1,l]) + d + bytearray([s,85])

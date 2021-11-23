@@ -22,9 +22,14 @@ from casconv import Cas2Bin, Cas2WavStream, Bas2Cas
 
 app = Flask(__name__)
 
-def genWaveData(b : bytearray):
+BINARIO = 0
+BASIC = 1
+
+def genWaveData(b : bytearray, tipo : int = BINARIO):
     arquivo = BytesIO(b)
-    gap = request.form.get("gap","") == "gap"
+    gap = False
+    if tipo == BINARIO:
+        gap = request.form.get("gap","") == "gap"    
     samples_per_second = int(request.form["sr"])
     stmono = request.form.get("stereo","") == "stereo"
     bits = int(request.form["bps"])
@@ -39,6 +44,8 @@ def genWaveData(b : bytearray):
         x = saida.stream.read()
         out = BytesIO()
         with ZipFile(out,"w",ZIP_DEFLATED) as zip:
+            if tipo == BASIC:
+                zip.writestr("output.cas", b)
             zip.writestr("output.wav",x)
         out.seek(0)
     return out
@@ -46,7 +53,7 @@ def genWaveData(b : bytearray):
 
 @app.route('/')
 def main():
-    return render_template('index.html', titulo="CasUtils")
+    return render_template('index.html', titulo="CasUtils", versao="2.2")
 
 @app.route('/convert', methods=['GET', 'POST'])
 def post():
@@ -61,6 +68,6 @@ def postBas():
     if len(basic_code):
         basic_code += '\r\n'
         b=bytearray(basic_code, encoding="ASCII")
-        return send_file(genWaveData(Bas2Cas('PROG.BAS',b).stream().read()), mimetype='application/octet-stream', as_attachment=True, download_name='basoutput.zip')
+        return send_file(genWaveData(Bas2Cas('PROG.BAS',b).stream().read(), BASIC), mimetype='application/octet-stream', as_attachment=True, download_name='basoutput.zip')
     else:
         return "You must send a BASIC code!", 400

@@ -6,7 +6,7 @@
     <body>
         <form method="post" enctype="multipart/form-data" action="/convert">
         <div style="height: 60px; width: 720px; margin:auto; padding-left: 60px;">
-            <img src="{{ url_for('static', filename='img/logo.jpg') }}" width="190" height="60" alt="logo" />v. 2
+            <img src="{{ url_for('static', filename='img/logo.jpg') }}" width="190" height="60" alt="logo" />v. {{ versao }}
             <div style="float: right; width: 200px; margin-top: 20px;">
                 <img src="https://developers.google.com/appengine/images/appengine-silver-120x30.gif" 
 alt="Powered by Google App Engine" />
